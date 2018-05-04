@@ -1,0 +1,12 @@
+# Absolute or relative path to the 'celery' command:
+CELERY_BIN="/srv/www/sites/mlpm_jobs/venv/bin/celery"
+
+# App instance to use
+# comment out this line if you don't use an app or fully qualified:
+CELERY_APP="tasks.celery:app"
+
+# Where to chdir at start.
+CELERYBEAT_CHDIR="/srv/www/sites/mlpm_jobs/"
+
+# Extra arguments to celerybeat
+CELERYBEAT_OPTS="--schedule=/var/run/celery/celerybeat-schedule"
