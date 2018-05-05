@@ -4,6 +4,14 @@
 # @Author : Yuvv
 # @Date   : 2018/5/4
 
+from celery.utils.log import get_logger
 
-if __name__ == '__main__':
-    pass
+from .celery import app as celery_app
+
+
+LOGGER = get_logger('celery.MLPMAsyncTask')
+
+
+@celery_app.task
+def beat_example():
+    LOGGER.debug('example beat task!')

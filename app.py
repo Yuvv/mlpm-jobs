@@ -1,10 +1,12 @@
 import logging.config
-from flask import Flask, request, g
+from flask import Flask, request
 from werkzeug.exceptions import MethodNotAllowed, NotFound, InternalServerError
 
 from apis import task_manager_bp
 from utils.error import MLPMJobErrorEnum, MLPMJobException, default_err_handler
 from utils.db import PGSession
+from utils.middleware import check_authorization
+from utils.general import get_param
 import settings
 
 
@@ -32,9 +34,10 @@ def create_app():
 
     @app.before_request
     def require_authorization():
-        g.user_info = None
-        _params = request.args if request.method == 'GET' else request.form
-        token = _params.get('token', '')
+        _ = get_param(request.args, '_', required=True, convert_to=float)
+        auth = request.headers.get('Authorization')
+        if not settings.DEBUG:
+            check_authorization(_, auth)
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
@@ -45,4 +48,5 @@ def create_app():
 
 if __name__ == '__main__':
     mlpm_jobs_app = create_app()
-    mlpm_jobs_app.run()
+    # WARNING: 这种方式切哦对那个会导致 celery 失效，原因不明
+    mlpm_jobs_app.run(debug=settings.DEBUG)

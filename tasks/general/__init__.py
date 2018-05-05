@@ -5,5 +5,8 @@
 # @Date   : 2018/5/4
 
 
-if __name__ == '__main__':
-    pass
+from .example import word_count
+
+__all__ = [
+    'word_count'
+]

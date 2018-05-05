@@ -8,7 +8,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.extend([os.path.join(base_dir, 'src')])
+sys.path.append(base_dir)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

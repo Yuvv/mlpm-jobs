@@ -7,20 +7,25 @@
 
 from __future__ import absolute_import
 
+import logging.config
+
 from celery import Celery
 from celery.schedules import crontab
 
 import settings
 
+logging.config.dictConfig(settings.LOGGING)
+
 app = Celery(broker=settings.CELERY_BROKER_URL,
              backend=settings.CELERY_RESULT_BACKEND)
-
+# app.config_from_object('settings')
 app.conf.timezone = settings.CELERY_TIMEZONE
 app.conf.imports = settings.CELERY_IMPORTS
+# app.autodiscover_tasks('tasks')
 
 app.conf.beat_schedule = {
-    'expire_notifications': {
-        'task': 'tasks.beat.expire_notifications',
+    'example': {
+        'task': 'tasks.beat.beat_example',
         'schedule': crontab(minute=33, hour=3),
         # 'args': (*args)
     }

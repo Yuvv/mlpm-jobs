@@ -9,6 +9,7 @@ import os
 # 工程目录的绝对路径
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SECRET_KEY = 'el(a0w64aqs%7hhq-fuu@&kr_nw$($wczscvmo0r=cbi*5o)'
 
 DEBUG = False
 
@@ -20,10 +21,11 @@ AUTH_USERS = {'yuvv': 'yuvv'}
 
 
 CELERY_BROKER_URL = 'amqp://micl:micl@localhost:5672/ziyan-server'
-CELERY_RESULT_BACKEND = 'db+postgresql://micl:micl@localhost/mlpm_jobs_result   '
+CELERY_RESULT_BACKEND = 'db+postgresql://micl:micl@localhost/mlpm_jobs_result'
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_IMPORTS = ('tasks.core',
-                  'tasks.beat')
+                  'tasks.beat',
+                  'tasks.general')
 
 LOGGING = {
     'version': 1,
@@ -41,13 +43,22 @@ LOGGING = {
             'level': 'DEBUG',
             'formatter': 'standard',
             'class': 'logging.StreamHandler',
-
         },
         'file': {
             'level': 'WARNING',
             'formatter': 'detail',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'app.log',
+            'encoding': 'utf-8',
+            'maxBytes': 10 * 1024 * 1024,
+            'backupCount': 10
+        },
+        'celery.file': {
+            'level': 'WARNING',
+            'formatter': 'detail',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/var/log/celery/MLPMAsyncTask.log',
+            'encoding': 'utf-8',
             'maxBytes': 10 * 1024 * 1024,
             'backupCount': 10
         },
@@ -59,9 +70,14 @@ LOGGING = {
             'propagate': True
         },
         'flask.app': {
-            'handlers': ['file'],
+            'handlers': ['file', 'console'],
             'level': 'WARNING',
             'propagate': False
         },
+        'celery.MLPMAsyncTask': {
+            'handlers': ['celery.file'],
+            'level': 'WARNING',
+            'propagate': False
+        }
     }
 }

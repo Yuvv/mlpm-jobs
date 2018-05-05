@@ -1,0 +1,7 @@
+{
+  "name": "MLPM Jobs",
+  "version": "1.0",
+  "description": "MLPM Jobs API 文档",
+  "title": "MLPM Jobs API",
+  "url" : "{{protocol}}://{{host}}:{{port}}"
+}

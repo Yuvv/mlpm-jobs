@@ -5,5 +5,10 @@
 # @Date   : 2018/5/4
 
 
-if __name__ == '__main__':
-    pass
+from .task import UserTask, MLPMTaskFunc
+
+
+__all__ = [
+    'MLPMTaskFunc',
+    'UserTask',
+]
