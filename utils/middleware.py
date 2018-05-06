@@ -24,7 +24,7 @@ def check_authorization(timestamp, authorization):
         if method != 'Basic':
             raise MLPMJobException(MLPMJobErrorEnum.UNAUTHORIZED,
                                    '暂时只接受 HTTP 基本认证方式。')
-        up = base64.decodebytes(code.encode('utf-8'))     # ValueError
+        up = base64.decodebytes(code.encode('utf-8')).decode('utf-8')     # ValueError
         username, password = up.split(':')        # ValueError
         _password = settings.AUTH_USERS.get(username)
         if _password is None:
