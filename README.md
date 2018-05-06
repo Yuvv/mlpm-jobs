@@ -2,6 +2,10 @@
 
 ## 开发环境搭建
 
+### python
+
+python 3.6+
+
 ### postgresql 安装与配置
 
 ```bash
@@ -124,6 +128,8 @@ apidoc -i apis -o docs/apidoc
 
 编写完成测试无误的话再添加到数据库中吧。
 目前没有添加相应的管理界面，直接修改数据库吧，字段也很短，把各个字段填写清楚就好了，尤其是函数文档那个字段。
+**当然如果想偷懒也是可以的，`utils/helper.py`中有辅助添加的`add_mlpm_task_func`函数，
+可以使用他添加函数对象。**
 
 
 ## 部署
@@ -135,6 +141,8 @@ apidoc -i apis -o docs/apidoc
     ```bash
     cp conf/celery/default/{celeryd,celerybeat} /etc/default/
     cp conf/celery/initd/{celeryd,celerybeat} /etc/init.d/
+    chmod +x /etc/init.d/celeryd
+    chmod +x /etc/init.d/celerybeat
     systemctl enable celeryd
     systemctl enable celerybeat
     ```
@@ -144,3 +152,12 @@ apidoc -i apis -o docs/apidoc
     cp conf/uwsgi.example.ini uwsgi_config.ini
     ```
 3. nginx。(这个的配置比较灵活，conf 目录里面的示例也只是简单列了一下，更具具体情况来吧)
+
+
+## 其它
+
+1. 目前只有简单的几个 API ，且功能简单，可以根据需求修改。
+
+2. 涉及到 Spark 的任务都需要牵扯到文件，后续应该添加（大）文件上传的api，最好能上传到 HDFS。
+
+3. 临时编写，bug难免，看着用看着改吧。:joy::joy::joy:
