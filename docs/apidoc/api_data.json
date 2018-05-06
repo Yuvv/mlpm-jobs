@@ -1,10 +1,142 @@
 [
   {
     "type": "GET",
+    "url": "/api/v1/task_funcs/list",
+    "title": "查看任务函数列表",
+    "version": "1.0.0",
+    "group": "Task_Func",
+    "description": "<p>列出已存在的任务函数</p>",
+    "parameter": {
+      "fields": {
+        "URL Params": [
+          {
+            "group": "URL Params",
+            "type": "String",
+            "optional": false,
+            "field": "task_id",
+            "description": "<p>任务 id</p>"
+          }
+        ],
+        "GET Params": [
+          {
+            "group": "GET Params",
+            "type": "Number",
+            "optional": false,
+            "field": "_",
+            "description": "<p>时间戳，utc 时间秒数</p>"
+          },
+          {
+            "group": "GET Params",
+            "type": "Number",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "1",
+            "description": "<p>需要获取的页数，可选，默认第一页</p>"
+          },
+          {
+            "group": "GET Params",
+            "type": "Number",
+            "optional": true,
+            "field": "per_page",
+            "defaultValue": "10",
+            "description": "<p>每一页的数量，可选，默认 10</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>user_task id，没什么用</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "func_id",
+            "description": "<p>对应函数的 id，没什么用</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>用户名</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "args",
+            "description": "<p>非命名参数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "kwargs",
+            "description": "<p>命名参数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "desc",
+            "description": "<p>描述信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "allowedValues": [
+              "\"PENDING\"",
+              "\"STARTED\"",
+              "\"RETRY\"",
+              "\"FAILURE\"",
+              "\"SUCCESS\""
+            ],
+            "optional": false,
+            "field": "status",
+            "description": "<p>任务状态</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "task_id",
+            "description": "<p>任务 id，真正有用的 id 是这个</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "create_date",
+            "description": "<p>任务创建时间，<code>%a, %d %b %Y %H:%M:%S GMT</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 0,\n    \"msg\": \"OK\",\n    \"data\": {\n        \"args\": \"[\\\"aa bb cc dd\\\"]\",\n        \"create_date\": \"Sat, 05 May 2018 08:25:32 GMT\",\n        \"desc\": null,\n        \"func_id\": 1,\n        \"id\": 1,\n        \"kwargs\": \"{}\",\n        \"task_id\": \"325a0a70-abe5-4908-b3e3-f77266306a05\",\n        \"username\": \"yuvv\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "apis/manger.py",
+    "groupTitle": "Task_Func",
+    "name": "GetApiV1Task_funcsList"
+  },
+  {
+    "type": "GET",
     "url": "/api/v1/task/:task_id/info",
     "title": "获取某一个任务的信息",
     "version": "1.0.0",
-    "group": "____",
+    "group": "User_Task",
     "description": "<p>根据任务 id 获取某一个任务的信息</p>",
     "parameter": {
       "fields": {
@@ -63,7 +195,7 @@
       ]
     },
     "filename": "apis/manger.py",
-    "groupTitle": "____",
+    "groupTitle": "User_Task",
     "name": "GetApiV1TaskTask_idInfo"
   },
   {
@@ -71,7 +203,7 @@
     "url": "/api/v1/task/:task_id/result",
     "title": "查看任务结果",
     "version": "1.0.0",
-    "group": "____",
+    "group": "User_Task",
     "description": "<p>根据任务 id 查看任务结果/状态</p>",
     "parameter": {
       "fields": {
@@ -144,7 +276,7 @@
       ]
     },
     "filename": "apis/manger.py",
-    "groupTitle": "____",
+    "groupTitle": "User_Task",
     "name": "GetApiV1TaskTask_idResult"
   },
   {
@@ -152,7 +284,7 @@
     "url": "/api/v1/task/:task_id/terminate",
     "title": "强制停止某一个任务",
     "version": "1.0.0",
-    "group": "____",
+    "group": "User_Task",
     "description": "<p>根据任务 id 强制停止某一个任务。</p>",
     "parameter": {
       "fields": {
@@ -211,149 +343,15 @@
       ]
     },
     "filename": "apis/manger.py",
-    "groupTitle": "____",
+    "groupTitle": "User_Task",
     "name": "GetApiV1TaskTask_idTerminate"
-  },
-  {
-    "type": "GET",
-    "url": "/api/v1/task_funcs/list",
-    "title": "查看任务函数列表",
-    "version": "1.0.0",
-    "group": "____",
-    "description": "<p>列出已存在的任务函数</p>",
-    "parameter": {
-      "fields": {
-        "URL Params": [
-          {
-            "group": "URL Params",
-            "type": "String",
-            "optional": false,
-            "field": "task_id",
-            "description": "<p>任务 id</p>"
-          }
-        ],
-        "GET Params": [
-          {
-            "group": "GET Params",
-            "type": "Number",
-            "optional": false,
-            "field": "_",
-            "description": "<p>时间戳，utc 时间秒数</p>"
-          }
-        ],
-        "GET params": [
-          {
-            "group": "GET params",
-            "type": "Number",
-            "optional": true,
-            "field": "page",
-            "defaultValue": "1",
-            "description": "<p>需要获取的页数，可选，默认第一页</p>"
-          },
-          {
-            "group": "GET params",
-            "type": "Number",
-            "optional": true,
-            "field": "per_page",
-            "defaultValue": "10",
-            "description": "<p>每一页的数量，可选，默认 10</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>user_task id，没什么用</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "func_id",
-            "description": "<p>对应函数的 id，没什么用</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "username",
-            "description": "<p>用户名</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "args",
-            "description": "<p>非命名参数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "kwargs",
-            "description": "<p>命名参数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "desc",
-            "description": "<p>描述信息</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "allowedValues": [
-              "\"PENDING\"",
-              "\"STARTED\"",
-              "\"RETRY\"",
-              "\"FAILURE\"",
-              "\"SUCCESS\""
-            ],
-            "optional": false,
-            "field": "status",
-            "description": "<p>任务状态</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "task_id",
-            "description": "<p>任务 id，真正有用的 id 是这个</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "create_date",
-            "description": "<p>任务创建时间，<code>%a, %d %b %Y %H:%M:%S GMT</code></p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 0,\n    \"msg\": \"OK\",\n    \"data\": {\n        \"args\": \"[\\\"aa bb cc dd\\\"]\",\n        \"create_date\": \"Sat, 05 May 2018 08:25:32 GMT\",\n        \"desc\": null,\n        \"func_id\": 1,\n        \"id\": 1,\n        \"kwargs\": \"{}\",\n        \"task_id\": \"325a0a70-abe5-4908-b3e3-f77266306a05\",\n        \"username\": \"yuvv\"\n    }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "apis/manger.py",
-    "groupTitle": "____",
-    "name": "GetApiV1Task_funcsList"
   },
   {
     "type": "GET",
     "url": "/api/v1/tasks/list",
     "title": "查看任务列表",
     "version": "1.0.0",
-    "group": "____",
+    "group": "User_Task",
     "description": "<p>查看某一格用户的任务列表</p>",
     "parameter": {
       "fields": {
@@ -380,11 +378,9 @@
             "optional": false,
             "field": "username",
             "description": "<p>提交者用户名，非必填，不过不填之后就找不到该用户了</p>"
-          }
-        ],
-        "GET params": [
+          },
           {
-            "group": "GET params",
+            "group": "GET Params",
             "type": "Number",
             "optional": true,
             "field": "page",
@@ -392,7 +388,7 @@
             "description": "<p>需要获取的页数，可选，默认第一页</p>"
           },
           {
-            "group": "GET params",
+            "group": "GET Params",
             "type": "Number",
             "optional": true,
             "field": "per_page",
@@ -486,7 +482,7 @@
       ]
     },
     "filename": "apis/manger.py",
-    "groupTitle": "____",
+    "groupTitle": "User_Task",
     "name": "GetApiV1TasksList"
   },
   {
@@ -494,7 +490,7 @@
     "url": "/api/v1/tasks/submit",
     "title": "提交任务",
     "version": "1.0.0",
-    "group": "____",
+    "group": "User_Task",
     "description": "<p>提交一个任务</p>",
     "parameter": {
       "fields": {
@@ -625,7 +621,7 @@
       ]
     },
     "filename": "apis/manger.py",
-    "groupTitle": "____",
+    "groupTitle": "User_Task",
     "name": "PostApiV1TasksSubmit"
   }
 ]

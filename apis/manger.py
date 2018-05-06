@@ -25,7 +25,7 @@ def get_task_info(task_id):
     """
     @api {GET} /api/v1/task/:task_id/info  获取某一个任务的信息
     @apiVersion 1.0.0
-    @apiGroup 用户任务
+    @apiGroup User-Task
     @apiDescription 根据任务 id 获取某一个任务的信息
 
     @apiParam (URL Params) {String} task_id 任务 id
@@ -66,7 +66,7 @@ def get_task_result(task_id):
     """
     @api {GET} /api/v1/task/:task_id/result  查看任务结果
     @apiVersion 1.0.0
-    @apiGroup 用户任务
+    @apiGroup User-Task
     @apiDescription 根据任务 id 查看任务结果/状态
 
     @apiParam (URL Params) {String} task_id 任务 id
@@ -109,7 +109,7 @@ def terminate_one_task(task_id):
     """
     @api {GET} /api/v1/task/:task_id/terminate  强制停止某一个任务
     @apiVersion 1.0.0
-    @apiGroup 用户任务
+    @apiGroup User-Task
     @apiDescription 根据任务 id 强制停止某一个任务。
 
     @apiParam (URL Params) {String} task_id 任务 id
@@ -146,7 +146,7 @@ def submit_task():
     """
     @api {post} /api/v1/tasks/submit  提交任务
     @apiVersion 1.0.0
-    @apiGroup 用户任务
+    @apiGroup User-Task
     @apiDescription 提交一个任务
 
     @apiParam (URL Params) {String} task_id 任务 id
@@ -237,15 +237,15 @@ def list_tasks():
     """
     @api {GET} /api/v1/tasks/list  查看任务列表
     @apiVersion 1.0.0
-    @apiGroup 用户任务
+    @apiGroup User-Task
     @apiDescription 查看某一格用户的任务列表
 
     @apiParam (URL Params) {String} task_id 任务 id
 
     @apiParam (GET Params) {Number} _ 时间戳，utc 时间秒数
     @apiParam (GET Params) {String} username 提交者用户名，非必填，不过不填之后就找不到该用户了
-    @apiParam (GET params) {Number} [page=1] 需要获取的页数，可选，默认第一页
-    @apiParam (GET params) {Number} [per_page=10] 每一页的数量，可选，默认 10
+    @apiParam (GET Params) {Number} [page=1] 需要获取的页数，可选，默认第一页
+    @apiParam (GET Params) {Number} [per_page=10] 每一页的数量，可选，默认 10
 
     @apiSuccess {Number} id  user_task id，没什么用
     @apiSuccess {Number} func_id  对应函数的 id，没什么用
@@ -297,14 +297,14 @@ def list_mlpm_task_funcs():
     """
     @api {GET} /api/v1/task_funcs/list  查看任务函数列表
     @apiVersion 1.0.0
-    @apiGroup 任务函数
+    @apiGroup Task-Func
     @apiDescription 列出已存在的任务函数
 
     @apiParam (URL Params) {String} task_id 任务 id
 
     @apiParam (GET Params) {Number} _ 时间戳，utc 时间秒数
-    @apiParam (GET params) {Number} [page=1] 需要获取的页数，可选，默认第一页
-    @apiParam (GET params) {Number} [per_page=10] 每一页的数量，可选，默认 10
+    @apiParam (GET Params) {Number} [page=1] 需要获取的页数，可选，默认第一页
+    @apiParam (GET Params) {Number} [per_page=10] 每一页的数量，可选，默认 10
 
     @apiSuccess {Number} id  user_task id，没什么用
     @apiSuccess {Number} func_id  对应函数的 id，没什么用
