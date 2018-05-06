@@ -10,7 +10,6 @@ from json.decoder import JSONDecodeError
 from celery.result import AsyncResult
 from flask import Blueprint, request, current_app, json
 from sqlalchemy import desc
-from sqlalchemy.exc import DatabaseError
 
 from models import UserTask, MLPMTaskFunc
 from tasks.core import MLPMAsyncTask
@@ -192,26 +191,27 @@ def submit_task():
     func_kwargs = get_param(request.form, 'kwargs')
     func_desc = get_param(request.form, 'desc', required=False)
 
+    func_id = PGSession.query(MLPMTaskFunc.id).filter(MLPMTaskFunc.name == func_name).scalar()
+    if not func_id:
+        raise MLPMJobException(MLPMJobErrorEnum.FUNC_NOT_FOUND)
+
+    args = json.loads(func_args)
+    if not isinstance(args, typing.Iterable):
+        raise MLPMJobException(MLPMJobErrorEnum.BAD_FUNC_PARAM,
+                               '`args` 必须是合法的可迭代对象。')
+
+    kwargs = json.loads(func_kwargs)
+    if not isinstance(kwargs, typing.Dict):
+        raise MLPMJobException(MLPMJobErrorEnum.BAD_FUNC_PARAM,
+                               '`kwargs` 必须是合法的字典对象。')
+
+    func = import_object(func_name)
+    if not isinstance(func, MLPMAsyncTask):
+        raise MLPMJobException(MLPMJobErrorEnum.ILLEGAL_FUNC,
+                               '你选择的函数不是合法的 MLPM 异步函数')
+
     session = PGSession()
     try:
-        func_id = session.query(MLPMTaskFunc.id).filter(MLPMTaskFunc.name == func_name).scalar()
-        if not func_id:
-            raise MLPMJobException(MLPMJobErrorEnum.FUNC_NOT_FOUND)
-
-        args = json.loads(func_args)
-        if not isinstance(args, typing.Iterable):
-            raise MLPMJobException(MLPMJobErrorEnum.BAD_FUNC_PARAM,
-                                   '`args` 必须是合法的可迭代对象。')
-
-        kwargs = json.loads(func_kwargs)
-        if not isinstance(kwargs, typing.Dict):
-            raise MLPMJobException(MLPMJobErrorEnum.BAD_FUNC_PARAM,
-                                   '`kwargs` 必须是合法的字典对象。')
-
-        func = import_object(func_name)
-        if not isinstance(func, MLPMAsyncTask):
-            raise MLPMJobException(MLPMJobErrorEnum.ILLEGAL_FUNC,
-                                   '你选择的函数不是合法的 MLPM 异步函数')
         r = func.delay(*args, **kwargs)
 
         user_task = UserTask(username=username, func_id=func_id,
@@ -224,8 +224,8 @@ def submit_task():
         current_app.logger.warning(f'<User: {username}> submit a task with bad arguments: ({func_args}, {func_kwargs})')
         raise MLPMJobException(MLPMJobErrorEnum.BAD_ARGUMENTS,
                                '您提供的函数参数不是可解析的 JSON 字符串！')
-    except DatabaseError:
-        current_app.logger.exception('Unknown error occurs when commit to db:')
+    except Exception:
+        current_app.logger.exception('Unknown error occurs:')
         session.rollback()
         raise MLPMJobException(MLPMJobErrorEnum.UNKNOWN_ERROR)
     finally:
