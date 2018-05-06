@@ -5,8 +5,9 @@
 # @Date   : 2018/5/4
 
 
-from .example import word_count
+from .example import word_count, spark_word_count
 
 __all__ = [
-    'word_count'
+    'word_count',
+    'spark_word_count',
 ]
