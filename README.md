@@ -83,6 +83,14 @@ npm i -g apidoc
 
 其它个人如模块名字。
 
+### 用户认证方式说明
+
+认证目前采用最简单的 **HTTP Basic Auth** 的方式，只不过密码是动态生成的。
+
+所有的api请求都需要在 url 中携带UTC时间戳参数参数名为`_`，值为UTC时间的秒数，即`_=1525568925`的形式。
+这个时间戳用来计算过期时间，请求的有效期为 60s，超过这个时间则会报请求过期错误（错误码2100）。
+动态密码的计算方式为：`dynamic_pass=MD5(真实密码@UTC时间戳)`。注意这里的时间戳必须和上面的`_`参数值一致。
+
 ### 数据库管理
 
 数据库推荐使用 [postgresql](https://www.postgresql.org/) ，坑比较少，最好使用 10 版本。
@@ -102,7 +110,7 @@ alembic upgrade "<version number here>"
 
 ### API 文档管理
 
-api 文档没有使用python原生doc方式而是使用了 [apidoc](http://apidocjs.com)，方便好用。
+[api 文档](https://yuvv.github.io/mlpm-jobs/apidoc/) 没有使用python原生doc方式而是使用了 [apidoc](http://apidocjs.com)，方便好用。
 
 具体的文档编写格式可以查阅一下官网，生成文档使用下面的命令即可：
 ```bash

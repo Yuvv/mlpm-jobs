@@ -20,7 +20,7 @@ SQLALCHEMY_URL = 'postgresql+psycopg2://micl:micl@localhost:5432/mlpm_jobs'
 AUTH_USERS = {'yuvv': 'yuvv'}
 
 
-CELERY_BROKER_URL = 'amqp://micl:micl@localhost:5672/ziyan-server'
+CELERY_BROKER_URL = 'amqp://micl:micl@localhost:5672/mlpm_jobs_server'
 CELERY_RESULT_BACKEND = 'db+postgresql://micl:micl@localhost/mlpm_jobs_result'
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_IMPORTS = ('tasks.core',
