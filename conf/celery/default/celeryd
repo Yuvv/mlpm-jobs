@@ -8,14 +8,14 @@ CELERYD_NODES="worker1"
 #CELERYD_NODES=10
 
 # Absolute or relative path to the 'celery' command:
-CELERY_BIN="/srv/www/sites/mlpm_jobs/venv/bin/celery"
+CELERY_BIN="/srv/www/sites/mlpm-jobs/venv/bin/celery"
 
 # App instance to use
 # comment out this line if you don't use an app  or fully qualified:
 CELERY_APP="tasks.celery:app"
 
 # Where to chdir at start.
-CELERYD_CHDIR="/srv/www/sites/mlpm_jobs/"
+CELERYD_CHDIR="/srv/www/sites/mlpm-jobs/"
 
 # Extra command-line arguments to the worker
 CELERYD_OPTS="--time-limit=300 --concurrency=4 -Ofair:worker1"
