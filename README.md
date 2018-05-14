@@ -6,6 +6,17 @@
 
 python 3.6+
 
+如果没有python36，则执行下列命令添加36的源并安装
+```shell
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+sudo apt-get install python3.6 python3.6-dev
+```
+如果没有 `add-apt-repository` 命令，执行下列命令安装
+```shell
+sudo apt install software-properties-common
+```
+
 ### postgresql 安装与配置
 
 ```bash
