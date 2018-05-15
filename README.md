@@ -19,6 +19,9 @@ sudo apt install software-properties-common
 
 ### postgresql 安装与配置
 
+下面为安装 10 版本，源的添加见[这里](https://www.postgresql.org/download/linux/ubuntu/)。
+也可以安装其它版本
+
 ```bash
 sudo apt-get install postgresql-10
 sudo -u postgres createuser -P micl
@@ -32,6 +35,8 @@ sudo -u postgres createdb mlpm_jobs_result -O micl
 ### RabbitMQ 安装与配置
 
 ```bash
+sudo apt install rabbitmq-server
+
 sudo rabbitmqctl add_user micl micl
 sudo rabbitmqctl add_vhost mlpm_jobs_server
 sudo rabbitmqctl set_user_tags micl mlpm_jobs
@@ -157,11 +162,33 @@ apidoc -i apis -o docs/apidoc
     systemctl enable celeryd
     systemctl enable celerybeat
     ```
+    之后可以启动 celery worker。(beat 暂时没用，可以不启动）
+    ```bash
+    service celeryd start
+    # service celerybeat start
+    ```
 
 2. uwsgi。（当然配置文件放在哪不重要，这里放在根目录只是为了方便，而且里面还有一个`touch-reload`参数配置了这个文件的路径）
     ```bash
     cp conf/uwsgi.example.ini uwsgi_config.ini
     ```
+
+    之后可以使用 uwsgi 拉起服务：
+    ```bash
+    uwsgi uwsgi_config.ini
+    ```
+
+    如果遇到文件描述符和连接数限制错误，修改相应配置（具体数值可自行决定）：
+    ```bash
+    vi /etc/security/limits.conf
+    # 添加下面两行（去掉注释）
+    # *                soft    nofile          20480
+    # *                hard    nofile          20480
+
+    # 修改最大连接数
+    sysctl -w net.core.somaxconn=1024
+    ```
+
 3. nginx。(这个的配置比较灵活，conf 目录里面的示例也只是简单列了一下，更具具体情况来吧)
 
 
