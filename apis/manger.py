@@ -12,6 +12,7 @@ from flask import Blueprint, request, current_app, json
 from sqlalchemy import desc
 
 from models import UserTask, MLPMTaskFunc
+from tasks import celery_app
 from tasks.core import MLPMAsyncTask
 from utils.db import PGSession
 from utils.error import MLPMJobException, MLPMJobErrorEnum
@@ -55,7 +56,7 @@ def get_task_info(task_id):
     if not user_task:
         raise MLPMJobException(MLPMJobErrorEnum.TASK_NOT_FOUND,
                                f'请检查您的任务id="{task_id}"是否正确。')
-    result = AsyncResult(task_id)
+    result = celery_app.AsyncResult(task_id)
     r = user_task.as_dict()
     r['status'] = result.status
     return make_json_resp(r)
@@ -96,7 +97,7 @@ def get_task_result(task_id):
         }
     }
     """
-    result = AsyncResult(task_id)
+    result = celery_app.AsyncResult(task_id)
     r = dict(task_id=result.id,
              status=result.status,
              result=result.result,
@@ -135,7 +136,7 @@ def terminate_one_task(task_id):
         }
     }
     """
-    result = AsyncResult(task_id)
+    result = celery_app.AsyncResult(task_id)
     result.revoke(terminate=True)
     return make_json_resp(dict(status=result.status,
                                info=result.info))
@@ -285,7 +286,7 @@ def list_tasks():
     rs = []
     for user_task in qs:
         r = user_task.as_dict()
-        result = AsyncResult(user_task.task_id)
+        result = celery_app.AsyncResult(user_task.task_id)
         r['status'] = result.status
         rs.append(r)
 

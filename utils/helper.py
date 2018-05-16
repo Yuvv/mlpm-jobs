@@ -15,7 +15,7 @@ from models import MLPMTaskFunc
 from utils.db import PGSession
 
 
-def add_mlpm_task_func(func: function, description: str=None) -> dict:
+def add_mlpm_task_func(func, description: str=None) -> dict:
     """
     添加一个任务函数
     :param func: 对应的任务函数对象
@@ -24,7 +24,7 @@ def add_mlpm_task_func(func: function, description: str=None) -> dict:
     """
     session = PGSession()
     try:
-        task_func = MLPMTaskFunc(name=f'{func.__module__:func.__name__}',
+        task_func = MLPMTaskFunc(name=f'{func.__module__}:{func.__name__}',
                                  desc=description,
                                  doc=func.__doc__)
         session.add(task_func)
